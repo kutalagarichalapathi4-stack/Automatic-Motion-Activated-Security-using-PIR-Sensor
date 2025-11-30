@@ -12,12 +12,6 @@
 7.	USB Cable – 1 No (for uploading code and powering Arduino)
 8.	Computer with Tinkercad or Arduino IDE installed
 
-## Circuit Diagram:
-<img width="1368" height="831" alt="image" src="https://github.com/user-attachments/assets/f24c24c0-f537-4440-9f93-f94f31dfe2e9" />
-
-<img width="1098" height="846" alt="image" src="https://github.com/user-attachments/assets/681ca3e7-c94f-407a-9bdb-1bbef9f2ac07" />
-
-
 ## Theory:
 
      Passive Infrared (PIR) sensors are electronic devices that detect motion by sensing infrared radiation emitted by objects. Every object with a temperature above absolute zero emits infrared radiation. The PIR sensor detects this radiation and can sense motion when a warm object, such as a human body, passes within its detection range. The sensor contains a pair of pyroelectric sensors housed under a Fresnel lens, which focuses the infrared signals onto the sensor surface. When the infrared levels change rapidly between the two pyroelectric sensors—such as when a person walks by—the sensor outputs a HIGH signal indicating motion detection.
@@ -67,61 +61,33 @@ Step 7: Save Your Work
 
 # Code:
 ```
-#include "Servo.h"
-
-Servo servo;
-
-const int pirPin = 12; 
-const int ledPin = 10; 
-const int servoPin = 3; 
-
-int pirState = LOW; 
-int prevPirState = LOW; 
-int servoPos = 0; 
-
-void setup() {
-  Serial.begin(9600);
-  pinMode(pirPin, INPUT); 
-  pinMode(ledPin, OUTPUT);
-  servo.attach(servoPin);
-  servo.write(servoPos);
-  delay(1000); 
-}
-
-void loop() {
-  pirState = digitalRead(pirPin); 
-
-  // Motion detected (rising edge)
-  if (pirState == HIGH && prevPirState == LOW)
+int buttonState = 0; 
+void setup() 
+{ 
+  pinMode(2, INPUT); 
+  pinMode(LED_BUILTIN, OUTPUT); 
+} 
+void loop() 
+{ 
+  buttonState = digitalRead(2); 
+  if (buttonState == HIGH) 
   { 
-    Serial.println("Motion Detected.");
-    digitalWrite(ledPin, HIGH);
-    prevPirState = HIGH;
-    
-    // Move the servo to 180 degrees
-    for(servoPos = 0; servoPos <= 180; servoPos++)
-    {
-      servo.write(servoPos);
-      delay(7);
-    }
-    for(servoPos = 180; servoPos >= 0; servoPos--)
-    {
-      servo.write(servoPos);
-      delay(7);
-    }
+    digitalWrite(LED_BUILTIN, HIGH); 
   } 
-  else if (pirState == LOW && prevPirState == HIGH)
+  else 
   { 
-    Serial.println("Motion Ended.");
-    digitalWrite(ledPin, LOW); 
-    prevPirState = LOW;
-    servo.write(servoPos); 
-  }
+    digitalWrite(LED_BUILTIN, LOW); 
+  } 
+  delay(10); 
 }
 ```
-# Output:
 
-https://github.com/user-attachments/assets/f594e02f-9d8b-49a2-8731-1e4dc3f0880e
+
+# Output:
+<img width="1919" height="858" alt="image" src="https://github.com/user-attachments/assets/918ad172-a644-46de-ae6e-ce4d79014d1c" />
+
+
+
 
 # Result:
 The PIR sensor successfully detected motion and triggered the Arduino to turn ON the built-in LED. The LED remained OFF when no motion was present, confirming correct circuit and code functionality.
